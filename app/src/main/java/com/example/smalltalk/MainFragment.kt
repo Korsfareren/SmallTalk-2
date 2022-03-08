@@ -14,10 +14,10 @@ import java.util.*
 
 
 val sentMessages = mutableListOf(
-    ChatMessage(message = "Hei.", date = Date(), sender = "Thomas"),
-    ChatMessage(message = "Hei du..", date = Date(), sender = "David"),
-    ChatMessage(message = "Skjera baggera", date = Date(), sender = "Thomas"),
-    ChatMessage(message = "Ingenting, Tingeling", date = Date(), sender = "David"),
+    ChatMessage(message = "Hei.", date = Date().toString(), sender = "Thomas"),
+    ChatMessage(message = "Hei du..", date = Date().toString(), sender = "David"),
+    ChatMessage(message = "Skjera baggera", date = Date().toString(), sender = "Thomas"),
+    ChatMessage(message = "Ingenting, Tingeling", date = Date().toString(), sender = "David"),
 )
 
 
