@@ -7,21 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smalltalk.database.ChatMessage
+import com.example.smalltalk.database.viewModels.MainViewModel
 import java.util.*
 
-
-val sentMessages = mutableListOf(
-    ChatMessage(message = "Hei.", date = Date().toString(), sender = "Thomas"),
-    ChatMessage(message = "Hei du..", date = Date().toString(), sender = "David"),
-    ChatMessage(message = "Skjera baggera", date = Date().toString(), sender = "Thomas"),
-    ChatMessage(message = "Ingenting, Tingeling", date = Date().toString(), sender = "David"),
-)
-
-
 class MainFragment : Fragment() {
+
+    private val viewModel: MainViewModel by viewModels()
 
     lateinit var chatEditText: EditText
     lateinit var sendMessageBtn: ImageButton
@@ -40,15 +35,16 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         sendMessageBtn = view.findViewById(R.id.sendMsgBtn)
         chatEditText = view.findViewById(R.id.chatEditText)
         recyclerView = view.findViewById(R.id.recycler_view)
 
         layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        adapter = MessageAdapter(sentMessages, "Thomas")
+        adapter = MessageAdapter(viewModel.sentMessages(), "Thomas")
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
     }
 }
+
+
