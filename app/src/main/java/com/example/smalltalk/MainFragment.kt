@@ -10,9 +10,7 @@ import android.widget.ImageButton
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smalltalk.database.ChatMessage
-import com.example.smalltalk.database.viewModels.MainViewModel
-import java.util.*
+import com.example.smalltalk.viewmodels.MainViewModel
 
 class MainFragment : Fragment() {
 
@@ -41,7 +39,7 @@ class MainFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        adapter = MessageAdapter(viewModel.sentMessages(), "Thomas")
+        adapter = MessageAdapter(viewModel.sentMessages(), viewModel.loggedInUser)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
     }

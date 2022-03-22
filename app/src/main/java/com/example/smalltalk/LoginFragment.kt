@@ -1,7 +1,5 @@
 package com.example.smalltalk
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,15 +8,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import com.example.smalltalk.database.AppDatabase
+import androidx.navigation.fragment.findNavController
 import com.example.smalltalk.database.User
-import com.example.smalltalk.database.viewModels.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.smalltalk.viewmodels.LoginViewModel
 
 
 class LoginFragment : Fragment() {
@@ -28,7 +21,6 @@ class LoginFragment : Fragment() {
     lateinit var loginButton: AppCompatButton
     lateinit var loginUsername: EditText
     lateinit var loginPassword: EditText
-    lateinit var loginStatus: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,40 +37,39 @@ class LoginFragment : Fragment() {
         loginButton = view.findViewById(R.id.login_button)
         loginUsername = view.findViewById(R.id.login_username)
         loginPassword = view.findViewById(R.id.login_password)
-        loginStatus = requireActivity().getPreferences(Context.MODE_PRIVATE)
 
-        login()
-    }
-
-    private fun login() {
         loginButton.setOnClickListener {
-            if (loginUsername.text.toString() == "t" && loginPassword.text.toString() == "k") {
-                loginStatus
-                    .edit()
-                    .putBoolean(loginKey, true)
-                    .apply()
-
+            if (viewModel.checkLogin(
+                    loginUsername.text.toString(),
+                    loginPassword.text.toString()
+                )
+            ) {
                 val user = User(
                     username = "Korsfareren",
                     fullName = "Thomas Korsnes"
                 )
-
-                val database = AppDatabase.getInstance(requireContext())
-                val userDao = database.userDao()
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    userDao.removeAllUsers()
-                    userDao.saveUser(user)
-
-                    requireActivity().supportFragmentManager.commit {
-                        setReorderingAllowed(true)
-                        add<MainFragment>(R.id.fragment_container)
-                        addToBackStack(null)
-                    }
-                }
+                switchFragment(user)
             } else {
-                Toast.makeText(activity, "Feil brukernavn eller passord", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Wrong username or password", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun switchFragment(user: User) {
+        viewModel.saveUserToDatabase(user) {
+            //Uten safe args
+            //findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment())
+
+            /*
+            requireActivity().supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add<MainFragment>(R.id.fragment_container)
+                addToBackStack(null)
+            }
+
+
+ */
         }
     }
 }
