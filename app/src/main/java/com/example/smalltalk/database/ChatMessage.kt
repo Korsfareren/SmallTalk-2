@@ -9,6 +9,6 @@ data class ChatMessage(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val message: String,
-    val date: Date,
+    val date: String,
     val sender: String
 )

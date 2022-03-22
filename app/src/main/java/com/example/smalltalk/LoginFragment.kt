@@ -12,14 +12,18 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.User
+import com.example.smalltalk.database.viewModels.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
+
+    private val viewModel: LoginViewModel by viewModels()
 
     lateinit var loginButton: AppCompatButton
     lateinit var loginUsername: EditText
@@ -47,7 +51,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-
         loginButton.setOnClickListener {
             if (loginUsername.text.toString() == "t" && loginPassword.text.toString() == "k") {
                 loginStatus
